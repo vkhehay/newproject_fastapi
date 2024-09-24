@@ -1,3 +1,5 @@
+from typing import Annotated
+
 from fastapi import APIRouter, Depends, status, HTTPException
 from sqlalchemy.orm import Session
 from resource import schemas, db_config, models, oauth2
@@ -9,7 +11,7 @@ router = APIRouter(
 
 
 @router.post('/', status_code=status.HTTP_201_CREATED, response_model=schemas.PostVacancy)
-def create_resume(post: schemas.PostVacancy, db: Session = Depends(db_config.get_db),
+def create_resume(post: Annotated[schemas.PostVacancy, Depends()], db: Session = Depends(db_config.get_db),
                   current_user: int = Depends(oauth2.get_current_user)):
     if current_user.id == 1:
         vacancy = models.Vacancies(**post.dict())

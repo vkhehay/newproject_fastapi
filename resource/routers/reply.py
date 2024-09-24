@@ -9,7 +9,8 @@ router = APIRouter(
 )
 
 
-def vacancy_reply(vacancy_id: int, db=db_config.SessionFactory):
+def vacancy_reply(vacancy_id: int, db=db_config.SessionFactory,
+                  current_user: int = Depends(oauth2.get_current_user)):
     with db() as session:
         resume = select(models.Vacancies).filter(models.Vacancies.id == vacancy_id)
         res = session.execute(resume)
